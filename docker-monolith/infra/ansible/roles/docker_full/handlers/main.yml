@@ -1,0 +1,10 @@
+---
+# handlers file for docker_full
+- name: Run container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ container_image }}"
+    state: started
+    published_ports: 9292
+    exposed_ports: 9292
+    network_mode: host

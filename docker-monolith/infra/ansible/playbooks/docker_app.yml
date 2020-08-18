@@ -1,0 +1,6 @@
+---
+- name: Deploy app in docker
+  hosts: all
+  become: true
+  roles:
+    - docker_full
