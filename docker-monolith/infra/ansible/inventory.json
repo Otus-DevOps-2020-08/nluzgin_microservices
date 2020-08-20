@@ -1,0 +1,14 @@
+{
+   "_meta": {
+      "hostvars": {
+         "instance-1": {
+            "ansible_host": "35.188.63.218"
+         }
+      }
+   },
+   "app": {
+      "hosts": [
+         "instance-1"
+      ]
+   }
+}

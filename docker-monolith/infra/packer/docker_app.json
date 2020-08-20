@@ -1,0 +1,33 @@
+{
+  "variables": {
+    "project_id": null,
+    "source_image_family": null,
+    "machine_type": null
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "image_name": "reddit-docker-app-{{timestamp}}",
+      "image_family": "reddit-base",
+      "source_image_family": "{{user `source_image_family`}}",
+      "zone": "europe-west1-b",
+      "ssh_username": "nluzgin",
+      "machine_type": "{{user `machine_type`}}",
+      "image_description": "Application in docker",
+      "disk_size": "{{user `disk_size`}}",
+      "disk_type": "{{user `disk_type`}}",
+      "network": "{{user `network`}}",
+      "tags": [
+        "{{user `puma-fw-rules-tag`}}"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./ansible/playbooks/docker_app.yml",
+      "ansible_env_vars": ["ANSIBLE_ROLES_PATH=ansible/roles"]
+    }
+  ]
+}

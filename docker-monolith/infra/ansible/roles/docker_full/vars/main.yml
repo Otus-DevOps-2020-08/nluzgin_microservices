@@ -1,0 +1,5 @@
+---
+# vars file for docker_full
+container_name: reddit
+container_image: funnyfatty/otus-reddit:1.0
+container_command: sleep 1d
