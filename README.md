@@ -69,3 +69,44 @@ docker run --rm --pid host -ti tehbilly/htop
     └── variables.tf
 
 Всё проверил, всё пашет.
+
+ДЗ №15
+
+Обратите внимание! Сборка ui началась не с первого шага. Подумайте - почему?
+
+Судя по логу уже есть необходимый слой для контейнера, поэтому его берут из кеша:
+Step 3/13 : ENV APP_HOME /app
+ ---> Using cache
+ ---> 4eb4fd23635e
+
+ Using cache - указывает на наличие кеша.
+
+Задание с *
+
+Создаём енв файл runtime_containers_vars
+
+Дописываем к именам сеток runtime:
+
+COMMENT_DATABASE_HOST=comment_db_runtime
+COMMENT_DATABASE=comments_runtime
+POST_DATABASE_HOST=post_db_runtime
+POST_DATABASE=posts_runtime
+POST_SERVICE_HOST=post_runtime
+POST_SERVICE_PORT=5000
+COMMENT_SERVICE_HOST=comment_runtime
+COMMENT_SERVICE_PORT=9292
+
+
+Запускаем контейнеры с правленными алиасами (без пересборки)
+
+docker run -d --network=reddit --network-alias=post_db_runtime --network-alias=comment_db_runtime --env-file=./runtime_containers_vars mongo:latest
+docker run -d --network=reddit --network-alias=post_runtime --env-file=./runtime_containers_vars funnyfatty/post:1.0
+docker run -d --network=reddit --network-alias=comment_runtime --env-file=./runtime_containers_vars funnyfatty/comment:1.0
+docker run -d --network=reddit -p 9292:9292 --env-file=./runtime_containers_vars funnyfatty/ui:1.0
+
+Задание с **
+Придумайте еще способы уменьшить размер образа:
+Собираем образы на специальных alpine образах и удаляем ненужные пакеты в конце
+
+Дополнительные варианты решения уменьшения размера образов можете оформить в виде файла Dockerfile.<цифра> в папке сервиса:
+Было бы интересно узнать что можно сделать сверх этого, я не додумался.
