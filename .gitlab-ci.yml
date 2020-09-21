@@ -9,22 +9,28 @@ stages:
 
 build_job:
   stage: build
+  image: docker:19.03.12
   script:
-    - docker build -f ./reddit/Dockerfile
+    - docker build -t funnyfatty/reddit:$CI_COMMIT_REF_NAME -f ./reddit/Dockerfile .
 
 variables:
   DATABASE_URL: 'mongodb://mongo/user_posts'
 
-#before_script:
+before_script:
+  - ls
+#  - docker info
 #  - cd reddit
 #  - bundle install
 
 test_unit_job:
   stage: test
-  services:
-    - mongo:latest
+  before_script:
+    - docker run --name=TESTS -d funnyfatty/reddit:$CI_COMMIT_REF_NAME
+  image: docker:19.03.12
   script:
-    - ruby simpletest.rb
+    - docker exec -t TESTS sh -c "cd /reddit && ruby simpletest.rb"
+  after_script:
+    - docker stop TESTS
 
 test_integration_job:
   stage: test
@@ -33,11 +39,11 @@ test_integration_job:
 
 deploy_dev_job:
   stage: review
+  before_script:
+    - docker push funnyfatty/reddit:$CI_COMMIT_REF_NAME
   script:
-    - echo 'Deploy'
-  environment:
-    name: dev
-    url: http://dev.example.com
+    - ansible-playbook ./gitlab-ci/reddit_server/ansible/playbooks/deploy_docker_reddit.yml
+
 
 branch review:
   stage: review

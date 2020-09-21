@@ -1,0 +1,4 @@
+---
+# defaults file for gitlab-ci
+runners_count: 2
+token: 4y9t2e3x2A5yx53-ugB2

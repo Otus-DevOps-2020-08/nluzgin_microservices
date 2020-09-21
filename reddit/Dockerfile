@@ -1,23 +1,15 @@
-FROM ruby:alpine3.12
+FROM ubuntu:16.04
 
-ENV APP_HOME /app
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
-ADD Gemfile* $APP_HOME/
+RUN apt-get update
+RUN apt-get install -y mongodb-server ruby-full ruby-dev build-essential git
+RUN gem install bundler
 
+COPY reddit /reddit
 COPY gitlab-ci/reddit-monolith/mongod.conf /etc/mongod.conf
-COPY gitlab-ci/reddit-monolith/db_config /db_config
+COPY gitlab-ci/reddit-monolith/db_config /reddit/db_config
 COPY gitlab-ci/reddit-monolith/start.sh /start.sh
 
-RUN apk --no-cache --update add build-base && \
-    gem install bundler -v 1.17.2 && \
-    bundle install && \
-    apk del build-base && \
-    chmod 0777 /start.sh && \
-
-ADD . $APP_HOME
-
-#ENV COMMENT_DATABASE_HOST comment_db
-#ENV COMMENT_DATABASE comments
+RUN cd /reddit && bundle install
+RUN chmod 0777 /start.sh
 
 CMD ["/start.sh"]
