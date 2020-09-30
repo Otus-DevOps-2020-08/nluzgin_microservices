@@ -24,10 +24,13 @@ before_script:
 
 test_unit_job:
   stage: test
+#  services:
+#    - mongo:latest
   before_script:
     - docker run --name=TESTS -d funnyfatty/reddit:$CI_COMMIT_REF_NAME
   image: docker:19.03.12
   script:
+#    - ruby simpletest.rb
     - docker exec -t TESTS sh -c "cd /reddit && ruby simpletest.rb"
   after_script:
     - docker stop TESTS
