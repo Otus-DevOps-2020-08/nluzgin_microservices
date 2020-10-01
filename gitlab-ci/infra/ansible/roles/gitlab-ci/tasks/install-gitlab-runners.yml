@@ -1,0 +1,5 @@
+---
+
+- name: Pull docker
+  command: docker pull gitlab/gitlab-runner:latest
+  tags: install-gitlab-ci-runner

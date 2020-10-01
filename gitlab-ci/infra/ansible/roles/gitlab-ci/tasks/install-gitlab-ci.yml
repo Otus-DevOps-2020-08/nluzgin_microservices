@@ -1,0 +1,46 @@
+---
+- name: Create a gitlab config directory
+  file:
+    path: /srv/gitlab/config
+    state: directory
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: Create a gitlab data directory
+  file:
+    path: /srv/gitlab/data
+    state: directory
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: Create a gitlab logs directory
+  file:
+    path: /srv/gitlab/logs
+    state: directory
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: Create a gitlab runners directory
+  file:
+    path: /srv/gitlab/runners
+    state: directory
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: create docker-compose.yml (ui)
+  template:
+    src: docker-compose.yml.tmpl
+    dest: /srv/gitlab/docker-compose.yml
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: create docker-compose.yml (runners)
+  template:
+    src: docker-compose.yml.runner.tmpl
+    dest: /srv/gitlab/runners/docker-compose.yml
+    mode: 0777
+  tags: install-gitlab-ci
+
+- name: Pull docker-compose
+  command:  chdir=/srv/gitlab docker-compose pull
+  tags: install-gitlab-ci

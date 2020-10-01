@@ -1,0 +1,6 @@
+---
+# handlers file for gitlab-ci
+#- name: estart gitlab-ci
+#  community.general.docker_compose:
+#    project_src: /srv/gitlab/
+#    state: present

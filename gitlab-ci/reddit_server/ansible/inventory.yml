@@ -1,0 +1,4 @@
+reddit-docker:
+  hosts:
+    server:
+      ansible_host: 146.148.115.121
