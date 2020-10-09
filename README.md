@@ -228,3 +228,32 @@ sudo docker exec -it gitlab-runner gitlab-runner register -n \
 5) С помощью ansible и значения переменной runners_count (в дофолтах роли) раскатываем столько раннеров, сколько душе угодно. Скелинг осуществляется с помощью docker-compose, который умеет вместе с ансиблом в поднятие 1+ инстанса
 
 Решение автоматизировано частично, но из соображений экономии времени на дз я позволил себе слегка полениться (и так отстаю)
+
+ДЗ 16.
+
+Добавьте ссылку на докер хаб с вашими образами в README.md и описание PR
+
+https://hub.docker.com/r/funnyfatty/prometheus
+https://hub.docker.com/r/funnyfatty/post
+https://hub.docker.com/r/funnyfatty/comment
+https://hub.docker.com/r/funnyfatty/ui
+
+Задание со * #1
+Добавьте в Prometheus мониторинг MongoDB с использованием необходимого экспортера. 
+
+Добавлено блок mongo-exporter, в качестве экспортера образ forekshub/percona-mongodb-exporter:1.0.1
++ бонусом свой экспортер в monitoring/mondo_exporter/Dockerfile только он вышел в разы толще, но я тип потренился.
+
+
+Задание со * #2
+Боль, страдание, безумие.
+Добавил
+  - job_name: 'cloudprober'
+    scrape_interval: 10s
+    static_configs:
+      - targets:
+        - 'blackbox-exporter:9313'
+Но не знаю по какой именно причине, но он так и не взлетел. Выдаёт ошибку подключения, хотя вроде бы внешне всё ок. Решил забить, т.к. сильно отстаю по курсу.
+
+Задание со * #2
+Makefile d src

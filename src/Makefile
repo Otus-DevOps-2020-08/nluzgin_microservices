@@ -3,7 +3,6 @@ POST_VERSION = 1.0
 UI_VERSION = 1.0
 PROMETHEUS_VERSION = 1.0
 USER_NAME = funnyfatty
-#VPATH = src:monitoring
 build: comment_build post_build ui_build prometheus_build
 push: comment_push post_push ui_push prometheus_push
 comment_build: comment
