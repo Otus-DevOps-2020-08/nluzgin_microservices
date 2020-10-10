@@ -29,8 +29,8 @@ scrape_configs:
          - 'mongo-exporter:9216'
 
 
-  - job_name: 'cloudprober'
-    scrape_interval: 10s
-    static_configs:
-      - targets:
-        - 'blackbox-exporter:9313'
+#  - job_name: 'cloudprober'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets:
+#        - 'blackbox-exporter:9313'

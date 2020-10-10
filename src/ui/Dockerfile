@@ -1,9 +1,4 @@
-FROM ruby:alpine3.12
-
-#
-#RUN apt-get update \
-#    && apt-get install -y ruby-full ruby-dev build-essential \
-#    && gem install bundler --no-ri --no-rdoc
+FROM ruby:2.6-alpine
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME
