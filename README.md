@@ -257,3 +257,25 @@ https://hub.docker.com/r/funnyfatty/ui
 
 Задание со * #2
 Makefile d src
+
+ДЗ 17.
+
+Пересобраны приложения с тегом logging.
+Создан docker/docker-compose-logging.yml для EFK.
+Создан Dockerfile, конфиг для fluentd, сбилжен и отправлен на dockerhub, а также добавлен в logging файл.
+Проверен запуск на 2GB RAM, на старте Kiban-ы хост "наглухо" умер с потерей ssh :)
+Добавлена настройка для post и ui  для отправки логов в fluentd
+Kibana: созданы index-pattern для индекса из потока fluentd, изучены логи приложения.
+Добавлен фильтр по json, добавлен фильтр с парсером по явной регулярке в fluentd.
+Изучены и добавлены описанные grok шаблоны в конфиг fluentd(распарсены часть полей логов сервиса ui).
+Добавлен в docker-compose-logging zipkin - изучены возможности трассировки запросов.
+
+Задание с *
+Разбор ещё одного формата логов
+Добавил:
+grok_pattern service=%{WORD:service} \| event=%{WORD:event} \| path=%{URIPATH:path} \| request_id=%{GREEDYDATA:request_id} \| remote_addr=%{IPORHOST:remote_addr} \| method=%{GREEDYDATA:method} \| response_status=%{NUMBER:response_status}
+
+
+Задание с *
+Траблшутинг UI-экспириенса
+Не делал
