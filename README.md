@@ -278,4 +278,4 @@ grok_pattern service=%{WORD:service} \| event=%{WORD:event} \| path=%{URIPATH:pa
 
 Задание с *
 Траблшутинг UI-экспириенса
-Не делал
+Не делал, т.к. сильно отстаю, но подглядел ответы коллег=)
