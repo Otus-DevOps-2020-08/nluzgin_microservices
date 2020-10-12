@@ -9,7 +9,7 @@ services:
   ui:
     volumes:
       - ./ui:/app
-    build: ./ui
+#    build: ./ui
     image: ${USERNAME}/ui:${UI_VERSION}
     ports:
       - ${UI_PORT}:${UI_PORT}/tcp
@@ -18,7 +18,7 @@ services:
     command: 'puma --debug -w 2'
 
   post:
-    build: ./post-py
+#    build: ./post-py
     image: ${USERNAME}/post:${POST_VERSION}
     networks:
       - back_net
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./post-py:/app
   comment:
-    build: ./comment
+#    build: ./comment
     image: ${USERNAME}/comment:${COMMENT_VERSION}
     networks:
       - back_net
