@@ -1,19 +1,13 @@
-FROM ruby:alpine3.12
+FROM ruby:2.3.3
 
-#
-#RUN apt-get update \
-#    && apt-get install -y ruby-full ruby-dev build-essential \
-#    && gem install bundler --no-ri --no-rdoc
+RUN apt-get update -qq && apt-get install -y build-essential
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME
-
 WORKDIR $APP_HOME
+
 ADD Gemfile* $APP_HOME/
-RUN apk --no-cache --update add build-base && \
-    gem install bundler -v 1.17.2 && \
-    bundle install && \
-    apk del build-base
+RUN bundle install
 ADD . $APP_HOME
 
 ENV POST_SERVICE_HOST post
