@@ -1,0 +1,80 @@
+image: ruby:2.4.2
+
+stages:
+  - build
+  - test
+  - review
+  - stage
+  - production
+
+build_job:
+  stage: build
+  image: docker:19.03.12
+  script:
+    - docker build -t funnyfatty/reddit:$CI_COMMIT_REF_NAME -f ./reddit/Dockerfile .
+
+variables:
+  DATABASE_URL: 'mongodb://mongo/user_posts'
+
+before_script:
+  - ls
+#  - docker info
+#  - cd reddit
+#  - bundle install
+
+test_unit_job:
+  stage: test
+#  services:
+#    - mongo:latest
+  before_script:
+    - docker run --name=TESTS -d funnyfatty/reddit:$CI_COMMIT_REF_NAME
+  image: docker:19.03.12
+  script:
+#    - ruby simpletest.rb
+    - docker exec -t TESTS sh -c "cd /reddit && ruby simpletest.rb"
+  after_script:
+    - docker stop TESTS
+
+test_integration_job:
+  stage: test
+  script:
+    - echo 'Testing 2'
+
+deploy_dev_job:
+  stage: review
+  before_script:
+    - docker push funnyfatty/reddit:$CI_COMMIT_REF_NAME
+  script:
+    - ansible-playbook ./gitlab-ci/reddit_server/ansible/playbooks/deploy_docker_reddit.yml
+
+
+branch review:
+  stage: review
+  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only:
+    - branches
+  except:
+    - master
+
+staging:
+  stage: stage
+  when: manual
+  only:
+    - /^\d+\.\d+\.\d+/
+  script:
+    - echo 'Deploy'
+  environment:
+    name: beta
+    url: http://beta.example.com
+
+production:
+  stage: production
+  when: manual
+  script:
+    - echo 'Deploy'
+  environment:
+    name: production
+    url: http://example.com

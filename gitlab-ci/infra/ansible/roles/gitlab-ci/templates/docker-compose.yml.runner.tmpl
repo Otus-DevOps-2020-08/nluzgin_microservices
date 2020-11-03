@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  gitlab-runner:
+    image: gitlab/gitlab-runner
+    restart: always
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitlab
+    extra_hosts:
+      - "gitlab:{{host_ip}}"
+    environment:
+      - REGISTRATION_TOKEN={{token}}
+      - RUNNER_EXECUTOR=docker
+      - DOCKER_IMAGE=docker:19.03.12
+      - DOCKER_PRIVILEGED=true
+
+networks:
+  gitlab:

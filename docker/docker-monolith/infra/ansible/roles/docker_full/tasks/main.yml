@@ -1,0 +1,59 @@
+---
+# tasks file for docker_full
+#- name: Install required system packages
+#  apt: name={{ item }} state=latest update_cache=yes
+#  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+- name: Install required system packages
+  become: true
+  apt:
+    update_cache: yes
+    state: latest
+    name:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+#    - gpg-agent
+    - software-properties-common
+    - python-pip
+    - virtualenv
+    - python-setuptools
+
+
+# Ставим докер
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: install docker
+  become: true
+  apt:
+    update_cache: yes
+    state: latest
+    name:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Pull default Docker image
+  docker_image:
+    name: "{{ container_image }}"
+    source: pull
+
+- name: Create puma container
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ container_image }}"
+    state: present
+  notify: Run container

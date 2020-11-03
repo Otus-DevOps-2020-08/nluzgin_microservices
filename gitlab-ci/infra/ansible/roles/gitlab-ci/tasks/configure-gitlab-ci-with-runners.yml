@@ -1,0 +1,85 @@
+---
+- name: Stop all services
+  community.general.docker_compose:
+    project_src: /srv/gitlab
+    build: no
+    stopped: yes
+  tags: configure-gitlab-ci-ui
+
+- name: Up gitlab-ci web
+  community.general.docker_compose:
+    project_src: /srv/gitlab
+    state: present
+  tags: configure-gitlab-ci-ui
+
+- name: Up gitlab-ci runners
+  community.general.docker_compose:
+    project_src: /srv/gitlab/runners
+    state: present
+    scale:
+      gitlab-runner: "{{runners_count}}"
+  tags: configure-gitlab-ci-runners
+
+
+
+
+
+
+#- name: Up gitlab-ci runners
+#  community.general.docker_compose:
+#    project_src: /srv/gitlab
+#    state: present
+#  tags: configure-gitlab-ci-ui
+
+#- name: Up gitlab-ci web
+#  command:  chdir=/srv/gitlab docker-compose up -d
+#  tags: configure-gitlab-ci-web
+
+#- name: run docker-compose
+#  docker_compose:
+#
+#    project_name: gitlab-ci
+#    definition:
+#    version: '3.3'
+#    services:
+#     ui:
+#       image: 'gitlab/gitlab-ce'
+#       restart: always
+#       hostname: 'gitlab.example.com'
+#       environment:
+#         GITLAB_OMNIBUS_CONFIG:
+#           external_url 'http://{{ host_ip }}'
+#       volumes:
+#          - "/srv/gitlab/config:/etc/gitlab"
+#          - "/srv/gitlab/logs:/var/log/gitlab"
+#          - "/srv/gitlab/data:/var/opt/gitlab"
+#       ports:
+#         - "80:80"
+#         - "443:443"
+#         - "2222:22"
+#     runner:
+#       image: gitlab/gitlab-runner
+#       restart: always
+#       volumes:
+#         -  /var/run/docker.sock:/var/run/docker.sock
+#       command: register  --url http://{{ hostvars[item]['host_ext_ip'] }}/
+#  --non-interactive --locked=false --name DockerRunner
+#  --executor docker --docker-image "docker:19.03.12"
+#  --docker-privileged  --registration-token 'VwG8hJrH6aZtyG24vyvL'
+#  --docker-volumes /var/run/docker.sock:/var/run/docker.sock
+#  --tag-list "linux,xenial,ubuntu,docker"
+#  --run-untagged
+#
+##      docker run -d --name gitlab-runner --restart always \
+##      -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+##      -v /var/run/docker.sock:/var/run/docker.sock \
+##      gitlab/gitlab-runner:latest
+
+
+#sudo docker exec -it gitlab-runner gitlab-runner register -n \
+#  --url http://35.198.142.9/ \
+#  --registration-token <TOKEN> \
+#  --executor docker \
+#  --description "My Docker Runner" \
+#  --docker-image "docker:19.03.12" \
+#  --docker-volumes /var/run/docker.sock:/var/run/docker.sock

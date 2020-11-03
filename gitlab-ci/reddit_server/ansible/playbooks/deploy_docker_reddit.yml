@@ -1,0 +1,5 @@
+- name: Stop current container
+  hosts: all
+  become: true
+  roles:
+    - reddit-docker

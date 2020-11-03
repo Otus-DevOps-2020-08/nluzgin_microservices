@@ -1,0 +1,6 @@
+---
+- name: Create gitlab-ci
+  hosts: all
+  become: true
+  roles:
+    - gitlab-ci

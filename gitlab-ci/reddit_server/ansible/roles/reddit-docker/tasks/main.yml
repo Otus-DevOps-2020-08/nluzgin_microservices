@@ -1,0 +1,10 @@
+---
+- name: Pull new reddit image
+  community.general.docker_image:
+    name: funnyfatty/reddit:gitlab-ci-1
+    source: pull
+
+- name: Start a container and use an env file
+  community.general.docker_container:
+    name: reddit-app
+    image: funnyfatty/reddit:gitlab-ci-1
