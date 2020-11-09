@@ -293,3 +293,22 @@ grok_pattern service=%{WORD:service} \| event=%{WORD:event} \| path=%{URIPATH:pa
 
 Задание с *
 Не успеваю
+
+ДЗ 19.
+
+Проблемы при прохождении шагов до ДЗ:
+- в гайдах допущены опечатки (kubeclt)
+- в гайдах указана устаревшая версия API (apps/v1beta2) нужная и рабочая версия apps/v1
+- в гайдах некорректная команда "minikube services list", корректная "minikube service list"
+- В моёс миникубе не был включен нужный аддон:
+dashboard                   | minikube | disabled     |
+Ни слова о том, как его включать в описании дз нет. Соответсвенно иди гугли. Само поисание дз очередной раз показывает отставание от реалей: dashboard не вклчён по дефолту.
+- Комнада "kubectl get all -n kube-system --selector k8s-app=kubernetes-dashboard" выводит ничего вообще. Найти аналог того, что указано в ДЗ можно с помощю "kubectl get all -n kube-system"
+- в дашборд невозожно попасть с помощью "minikube service kubernetes-dashboard -n kube-system", нужно написать "minikube dashboard"
+- команда "kubectl describe service ui -n dev | grep default" не выдаёт ничего. Токен нашел следующим образом: "kubectl -n kube-system describe secret | grep default" -> "kubectl -n kube-system describe secret default-token-2snlk | grep token"
+
+
+1) Deployment компонента post сконфигурируйте подобным же образом самостоятельно и проверьте его работу. Не забудьте, что post слушает по-умолчанию на порту 5000
+см. post-deployment.yml
+2) По аналогии создайте объект Service в файле post-service.yml для компонента post (не забудьте про label-ы и правильные tcp-порты).
+см. post-service.ymle
