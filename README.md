@@ -312,3 +312,16 @@ dashboard                   | minikube | disabled     |
 см. post-deployment.yml
 2) По аналогии создайте объект Service в файле post-service.yml для компонента post (не забудьте про label-ы и правильные tcp-порты).
 см. post-service.ymle
+
+ДЗ 20.
+
+
+1) Обновите mongo-network-policy.yml так, чтобы post-сервис дошел до базы данных.\
+см mongo-network-policy.yml
+
+2)Задание:
+Создайте пост в приложении
+Удалите deployment для mongo
+Создайте его заново
+
+Результат: данные в труху
