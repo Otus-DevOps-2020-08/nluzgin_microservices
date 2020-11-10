@@ -6,7 +6,6 @@ metadata:
   labels:
     app: reddit
     component: post
-    post-db: "true"
 spec:
   ports:
   - port: 5000
@@ -15,4 +14,3 @@ spec:
   selector:
     app: reddit
     component: post
-    post-db: "true"
