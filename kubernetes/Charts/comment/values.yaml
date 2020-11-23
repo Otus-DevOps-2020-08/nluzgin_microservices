@@ -4,5 +4,7 @@ service:
   externalPort: 9292
 
 image:
-  repository: chromko/ui
+  repository: chromko/comment
   tag: latest
+
+databaseHost:

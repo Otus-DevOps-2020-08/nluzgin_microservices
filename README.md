@@ -325,3 +325,27 @@ dashboard                   | minikube | disabled     |
 Создайте его заново
 
 Результат: данные в труху
+
+ДЗ 21.
+
+Проблемы при прохождении шагов до ДЗ:
+- helm 3й версии релизнулся 15 дней назад. Там нет tiller'a, оказалось надо ставить вторую версию
+- Команда "helm install --name test-ui-2 ui/" выдавала ошибку:
+Error: render error in "ui/templates/service.yaml": template: ui/templates/service.yaml:13:20: executing "ui/templates/service.yaml" at <.Values.service.externalPort>: nil pointer evaluating interface {}.externalPort
+
+Проблема крылась в том, что values.yaml я закинул в папку templates :D
+- Из мануала копируется команда "helm plugin install https://github.com/rimusz/helmtiller" такой репы нет, по факту - пропущен - (только при копировании)
+
+
+Задачи ДЗ:
+
+1) Создать файлы _helpers.tpl в папках templates сервисов ui, post и comment
+Вставить функцию “.fullname” в каждый _helpers.tpl файл. заменить на имя чарта соотв. сервиса
+В каждом из шаблонов манифестов вставить функцию
+
+Done
+
+Остановился на странице 54!!!!
+
+
+
