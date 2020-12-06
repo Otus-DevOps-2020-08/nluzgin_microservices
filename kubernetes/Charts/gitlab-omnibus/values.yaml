@@ -45,6 +45,12 @@ gitlabRunnerImage: gitlab/gitlab-runner:alpine-v10.6.0
 # Valid values for provider are `gke` for Google Container Engine. Leaving it blank (or any othervalue) will disable fast disk options.
 provider: gke
 
+# Gitlab pages
+# The following 3 lines are needed to enable gitlab pages.
+# pagesExternalScheme: http
+# pagesExternalDomain: your-pages-domain.com
+# pagesTlsSecret: gitlab-pages-tls # An optional reference to a tls secret to use in pages
+
 ## Storage Class Options
 ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
 ## If not defined, but provider is gke, will use SSDs
@@ -58,6 +64,13 @@ provider: gke
 healthCheckToken: 'SXBAQichEJasbtDSygrD'
 # Optional, for GitLab EE images only
 #gitlabEELicense: base64-encoded-license
+
+# Additional omnibus configuration,
+# see https://docs.gitlab.com/omnibus/settings/configuration.html
+# for possible configuration options
+#omnibusConfigRuby: |
+#  gitlab_rails['smtp_enable'] = true
+#  gitlab_rails['smtp_address'] = "smtp.example.org"
 
 gitlab-runner:
   checkInterval: 1
