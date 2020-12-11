@@ -325,3 +325,65 @@ dashboard                   | minikube | disabled     |
 Создайте его заново
 
 Результат: данные в труху
+
+ДЗ 21.
+
+Проблемы при прохождении шагов до ДЗ:
+- helm 3й версии релизнулся 15 дней назад. Там нет tiller'a, оказалось надо ставить вторую версию
+- Команда "helm install --name test-ui-2 ui/" выдавала ошибку:
+Error: render error in "ui/templates/service.yaml": template: ui/templates/service.yaml:13:20: executing "ui/templates/service.yaml" at <.Values.service.externalPort>: nil pointer evaluating interface {}.externalPort
+
+Проблема крылась в том, что values.yaml я закинул в папку templates :D
+- Из мануала копируется команда "helm plugin install https://github.com/rimusz/helmtiller" такой репы нет, по факту - пропущен "-" (только при копировании)
+- requirements.yaml в ДЗ указан не корректно, пришлось добавлять папку Charts в пути.
+- Команда "helm tiller run -- helm upgrade --install --wait --namespace=reddit-ns reddit ./" завершается с ошибкой:
+Error: validation failed: unable to recognize "": no matches for kind "Deployment" in version "extensions/v1beta1"
+
+На сколько я понял проблема в ingress.yaml и "apiVersion: extensions/v1beta1"
+
+Замена на apps/v1 приводит к ошибке:
+Error: validation failed: [unable to recognize "": no matches for kind "Deployment" in version "extensions/v1beta1", unable to recognize "": no matches for kind "Ingress" in version "apps/v1"]
+
+Замена на networking.k8s.io/v1 приводит к ошибке:
+Error: validation failed: [unable to recognize "": no matches for kind "Deployment" in version "extensions/v1beta1", unable to recognize "": no matches for kind "Ingress" in version "networking.k8s.io/v1"]
+
+Для определения какая апи используется в кластере можно запустить команду "kubectl explain ingress" (вместо ingress можно писать deployment или т.п.)
+Выровняв все версии с версиями апи кластера ошибки остались прежними.
+
+Вылечелось всё ВНЕЗАПНО и БЕСПОЩАДНО переустановкой самого k8s кластера на версию 15.хх
+
+Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.3", GitCommit:"1e11e4a2108024935ecfcb2912226cedeafd99df", GitTreeState:"clean", BuildDate:"2020-10-14T12:50:19Z", GoVersion:"go1.15.2", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"16+", GitVersion:"v1.16.15-gke.4300", GitCommit:"7ed5ddc0e67cb68296994f0b754cec45450d6a64", GitTreeState:"clean", BuildDate:"2020-10-28T09:23:22Z", GoVersion:"go1.13.15b4", Compiler:"gc", Platform:"linux/amd64"}
+
+
+После этого починилась и команда "helm install --name test-ui-2 ui/"
+
+- Следущая мина была близко:
+"Установим наше приложение:
+/Charts] $ helm install reddit --name reddit-test"
+
+Первая проблема заключалась в том, что практически полностью отсутсвует контекст и не понятно запускаться надо было из папки nluzgin_microservices/kubernetes/reddit
+
+Вторая заключалась в том, что даже зная где запускаться, всё равно выдавалась ошибка:
+$ helm install reddit --name reddit-test
+Error: failed to download "reddit" (hint: running `helm repo update` may help)
+
+helm repo update - разумеется не помогал.
+
+Преподователь подсказал выполнить команду:
+$ helm install reddit --name reddit-test .
+Но, естественно:
+Error: This command needs 1 argument: chart name
+
+
+- Проблемы с установкой gitlab:
+helm install --name gitlab . -f values.yaml
+WARNING: This chart is deprecated
+Error: release gitlab failed: DaemonSet.apps "nginx" is invalid: spec.template.metadata.labels: Invalid value: map[string]string{"app":"nginx"}: `selector` does not match template `labels`
+
+Всё решилось переустановкой кластера (второй раз) на версию 1.15.12-gke.4000
+
+- После поднятия gitlab - не мог зайти в вебморду.
+
+Оказывается Марс в опозиции и месяц красной луны. Ничего не делал - заработало само спустя сутки...
+
