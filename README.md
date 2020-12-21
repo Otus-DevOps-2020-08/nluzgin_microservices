@@ -387,3 +387,9 @@ Error: release gitlab failed: DaemonSet.apps "nginx" is invalid: spec.template.m
 
 Оказывается Марс в опозиции и месяц красной луны. Ничего не делал - заработало само спустя сутки...
 
+ДЗ 22
+
+Развернул Prometheus в k8s
+Настроил Prometheus и Grafana для сбора метрик
+Настроил и параметризовал дашборды и неймспейсы.
+
